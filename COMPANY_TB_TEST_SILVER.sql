@@ -1,0 +1,66 @@
+
+USE DATABASE COMPANY_TB_TEST;
+USE SCHEMA SILVER;
+
+CREATE OR REPLACE TABLE COMPANY_TB_TEST.SILVER.BILLION_RECORDS_ENRICHED AS
+SELECT 
+    br.SS_SOLD_DATE_SK,
+    br.SS_SOLD_TIME_SK,
+    br.SS_ITEM_SK,
+    br.SS_CUSTOMER_SK,
+    br.SS_CDEMO_SK,
+    br.SS_HDEMO_SK,
+    br.SS_ADDR_SK,
+    br.SS_STORE_SK,
+    br.SS_PROMO_SK,
+    br.SS_TICKET_NUMBER,
+    br.SS_QUANTITY,
+    br.SS_WHOLESALE_COST,
+    br.SS_LIST_PRICE,
+    br.SS_SALES_PRICE,
+    br.SS_EXT_DISCOUNT_AMT,
+    br.SS_EXT_SALES_PRICE,
+    br.SS_EXT_WHOLESALE_COST,
+    br.SS_EXT_LIST_PRICE,
+    br.SS_EXT_TAX,
+    br.SS_COUPON_AMT,
+    br.SS_NET_PAID,
+    br.SS_NET_PAID_INC_TAX,
+    br.SS_NET_PROFIT,
+    c.C_CUSTOMER_ID,
+    c.C_FIRST_NAME,
+    c.C_LAST_NAME,
+    d.D_DATE,
+    d.D_DAY_NAME,
+    d.D_QUARTER_NAME,
+    -- Derived Metrics
+    (br.SS_SALES_PRICE - br.SS_WHOLESALE_COST) AS GROSS_PROFIT, -- Gross profit calculation
+    (br.SS_EXT_DISCOUNT_AMT + br.SS_COUPON_AMT) AS TOTAL_DISCOUNT, -- Total discount given
+    (br.SS_QUANTITY * br.SS_SALES_PRICE) AS TOTAL_REVENUE, -- Total revenue for the transaction
+    (br.SS_EXT_SALES_PRICE / NULLIF(br.SS_QUANTITY, 0)) AS AVERAGE_ITEM_PRICE, -- Avoid division by zero
+    -- Categorizing profit levels
+    CASE 
+        WHEN (br.SS_SALES_PRICE - br.SS_WHOLESALE_COST) > 500 THEN 'High Profit'
+        WHEN (br.SS_SALES_PRICE - br.SS_WHOLESALE_COST) BETWEEN 100 AND 500 THEN 'Medium Profit'
+        ELSE 'Low Profit'
+    END AS PROFIT_CATEGORY,
+    -- Checking for significant discounts
+    CASE 
+        WHEN br.SS_EXT_DISCOUNT_AMT > br.SS_LIST_PRICE * 0.5 THEN 'High Discount'
+        ELSE 'Regular Discount'
+    END AS DISCOUNT_CATEGORY
+FROM 
+    COMPANY_TB_TEST.BRONZE.BILLION_RECORDS_TABLE1 br
+LEFT JOIN 
+    COMPANY_TB_TEST.TPCDS_SF10TCL.CUSTOMER c
+    ON br.SS_CUSTOMER_SK = c.C_CUSTOMER_SK
+LEFT JOIN 
+    COMPANY_TB_TEST.TPCDS_SF10TCL.DATE_DIM d
+    ON br.SS_SOLD_DATE_SK = d.D_DATE_SK;
+
+
+select count(*) from 
+BILLION_RECORDS_ENRICHED;
+
+select * from 
+BILLION_RECORDS_ENRICHED limit 10;
