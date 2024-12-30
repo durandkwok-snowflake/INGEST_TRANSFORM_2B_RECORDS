@@ -64,14 +64,14 @@ Define stages for both CSV and Parquet file formats:
 
 #### CSV Stage
 ```sql
-CREATE STAGE TB_STAGE URL = 's3://mybucket/mystage' CREDENTIALS = (
+CREATE STAGE TB_STAGE URL = 's3://mybucket/mystage/csv' CREDENTIALS = (
   aws_key_id = 'my_aws_key_id', aws_secret_key = 'my_aws_secret_key'
 );
 ```
 
 #### Parquet Stage
 ```sql
-CREATE STAGE LEGACY_PARQUET URL = 's3://mybucket/mystage' CREDENTIALS = (
+CREATE STAGE LEGACY_PARQUET URL = 's3://mybucket/mystage/parquet' CREDENTIALS = (
   aws_key_id = 'my_aws_key_id', aws_secret_key = 'my_aws_secret_key'
 );
 ```
