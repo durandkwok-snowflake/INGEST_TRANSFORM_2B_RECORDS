@@ -107,7 +107,7 @@ FILE_FORMAT = my_parquet_format2
 ON_ERROR=ABORT_STATEMENT;
 ```
 
-### 5. Transform Data to the Silver Layer Using Snowflake Notebook with Snowpark
+### 5. Transformation Pipeline - Transform data to the Silver Layer Using Snowflake Notebook with Snowpark
 
 Prepare the Silver layer by enriching and cleansing the data:
 ```python
