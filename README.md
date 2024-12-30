@@ -3,7 +3,7 @@ INGEST_TRANSFORM_2B_RECORDS
 
 # README: Ingest and Transform 2 Billion Records in Snowflake
 
-This repository demonstrates how to efficiently ingest and transform a dataset containing over 2 billion records in Snowflake. Using the Medallion Architecture (Bronze, Silver, and Gold layers), the process leverages Snowflake's high performance for managing large datasets.
+This repository demonstrates how to efficiently ingest and transform a dataset containing over 2 billion records in Snowflake. Using the Medallion Architecture (Bronze, Silver, and Gold layers), the process leverages Snowflake's high performance platform for managing large datasets.
 
 ---
 
