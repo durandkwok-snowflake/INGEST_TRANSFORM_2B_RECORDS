@@ -121,7 +121,7 @@ from snowflake.snowpark.functions import col, when, lit
 from snowflake.snowpark.types import DoubleType
 import snowflake.snowpark.functions as F
 
-# We can also use Snowpark for our analyses!
+# Create a session
 from snowflake.snowpark.context import get_active_session
 session = get_active_session()
 
